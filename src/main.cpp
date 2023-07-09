@@ -1,4 +1,4 @@
-#include "chess.hpp"
+#include "lib/chess.hpp"
 
 int main() {
     Field board[8][8];
