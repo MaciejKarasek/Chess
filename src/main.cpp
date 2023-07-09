@@ -1,8 +1,7 @@
 #include "lib/chess.hpp"
 
 int main() {
-    Field board[8][8];
-    print_chessboard(board);
-
+    Board chesss;
+    chesss.print();
     return 0;
 }
