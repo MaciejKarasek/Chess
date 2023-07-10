@@ -64,6 +64,8 @@ void Piece::setvalues(int tp, int cr) // tp stands for type, cr for color
         uni = " ";
     }
 }
+
+Piece::~Piece() = default;
 // End of Piece obj
 
 // Field obj
@@ -79,6 +81,8 @@ void Field::setvalues(int tp, int cr)
         piece.setvalues(tp, cr);
     }
 }
+
+Field::~Field() = default;
 // End of Field obj
 
 // Board obj
@@ -149,4 +153,6 @@ void Board::print() {
         }   
     }
 }
+
+Board::~Board() = default;
 // End of Board obj
