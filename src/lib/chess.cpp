@@ -4,6 +4,7 @@
 Piece::Piece() {
     uni = " ";
     type = 0;
+    fst_move = 0;
 }
 void Piece::setvalues(int tp, int cr) // tp stands for type, cr for color
 {
@@ -62,7 +63,15 @@ void Piece::setvalues(int tp, int cr) // tp stands for type, cr for color
     } else {
         type = 0;
         uni = " ";
+        color = cr;
     }
+}
+
+void Piece::setvalues(const Piece& other) {
+    uni = other.uni;
+    type = other.type;
+    color = other.type;
+    fst_move = 1;
 }
 
 Piece::~Piece() = default;
@@ -79,7 +88,16 @@ void Field::setvalues(int tp, int cr)
     if (tp != 0) {
         occupied = 1; 
         piece.setvalues(tp, cr);
+    } else {
+        occupied = 0;
+        piece.setvalues(tp, cr);
     }
+}
+
+void Field::setvalues(const Field& other) 
+{
+    occupied = 1;
+    piece.setvalues(other.piece);
 }
 
 Field::~Field() = default;
@@ -152,6 +170,38 @@ void Board::print() {
             std::cout << std::endl << separator << std::endl;
         }   
     }
+}
+
+int Board::move(int arr[4], int who) {
+    // Aliases
+    Field& move = brd[arr[0]][arr[1]];
+    Field& where = brd[arr[2]][arr[3]];
+    if (move.occupied && move.piece.color == who) {
+        if (!(where.occupied)) {
+            switch(move.piece.type) {
+                case 1:
+                    if (move.piece.fst_move == 0) {
+                        if (arr[1] == arr[3] && (arr[0] == (arr[2] + 1) || arr[0] == (arr[2] + 2))) {
+                            where.setvalues(move);
+                            move.setvalues(0, -1);
+                            return 0;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return 1;
 }
 
 Board::~Board() = default;
