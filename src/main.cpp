@@ -1,7 +1,6 @@
-#include "lib/chess.hpp"
+#include "lib/game.hpp"
 
 int main() {
-    Board chesss;
-    chesss.print();
+    game();
     return 0;
 }
