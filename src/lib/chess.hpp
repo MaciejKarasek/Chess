@@ -9,9 +9,9 @@ class Piece {
         Piece();
         std::string uni; // Char that represent piece at chessboard
         int type; // Type of piece
-        int color; // Color of piece
+        int color; // Color of piece 0 - Black, 1 - White
         bool attack_king; // If attacking king -> 1, of not -> 0
-        bool fst_move; // Piece has been already moved once -> else -> 0
+        int num_moves; // number of moves
         void setvalues(int tp, int cr);
         void setvalues(const Piece& other);
         ~Piece();
@@ -34,8 +34,13 @@ class Board {
         void print();
         Field brd[8][8]; // Chessboard
         int move(int arr[4], int who);
+        int last[2]; // Coordinates of last moved piece
+        int last_moved; 
         ~Board();
 };
+
+int check_move(int who, int type, Field& move, Field& where, 
+                Field brd[8][8], int cords[4], int last[2], int last_moved);
 
 
 #endif

@@ -10,8 +10,8 @@ void game() {
     std::cout << "you want to place your piece\n";
     std::cout << "Example: \"Type your move: e2 e4\" \n";
     bool checkmate = 0;
-    std::string who_moves[2] = {"White ", "Black "};
-    int error, who = 0;
+    std::string who_moves[2] = {"Black ", "White "};
+    int error, who = 1;
     //board->brd[6][4].piece.uni = "E";
     while (checkmate == 0) {
         std::cout << who_moves[who] << "move!" << std::endl;
@@ -39,7 +39,8 @@ int handle_move(std::string move, std::string where, Board *board, int who) {
     {
         move_arr[0] = 8 - ((move[1] - '0')); // Converting to 
         move_arr[2] = 8 - ((where[1] - '0'));
-        if (!(move_arr[1] == std::clamp(move_arr[1], 0, 7)) || !(move_arr[3] == std::clamp(move_arr[3], 0, 7)))
+        if (!(move_arr[1] == std::clamp(move_arr[1], 0, 7)) 
+            || !(move_arr[3] == std::clamp(move_arr[3], 0, 7)))
             { return 1; }
         switch (tolower(move[0])) {
             case 'a':
@@ -99,7 +100,7 @@ int handle_move(std::string move, std::string where, Board *board, int who) {
                 return 1;
                 break;
         }
-        std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
+        // std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
         return board->move(move_arr, who);
     }
     return 1;
