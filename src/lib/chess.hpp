@@ -36,11 +36,8 @@ class Board {
         int move(int arr[4], int who);
         int last[2]; // Coordinates of last moved piece
         int last_moved; 
+        int check_move(int who, int type, Field& move, Field& where, int cords[4]);
         ~Board();
 };
-
-int check_move(int who, int type, Field& move, Field& where, 
-                Field brd[8][8], int cords[4], int last[2], int last_moved);
-
 
 #endif

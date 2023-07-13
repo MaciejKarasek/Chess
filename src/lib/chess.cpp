@@ -184,7 +184,7 @@ int Board::move(int arr[4], int who) {
     if (move.occupied == 1 && move.piece.color == who) {
         switch(move.piece.type) {
             case 1:
-                check = check_move(who, 1, move, where, brd, arr, last, last_moved);
+                check = check_move(who, move.piece.type, move, where, arr);
                 if (check) {
                     where.setvalues(move);
                     move.setvalues(0, -1);
@@ -198,14 +198,22 @@ int Board::move(int arr[4], int who) {
                     return 0;
                 }
                 break;
-            /**case 2:
+            case 2:
+                if (check_move(who, move.piece.type, move, where, arr)) {
+                    where.setvalues(move);
+                    move.setvalues(0, -1);
+                    last[0] = arr[2];
+                    last[1] = arr[3];
+                    last_moved = where.piece.num_moves;
+                    return 0;
+                }
                 break;
-            case 3:
+            /*case 3:
                 break;
             case 4:
                 break;
             case 5:
-                break;**/
+                break;*/
             default:
                 return 0;
                 break;
@@ -214,12 +222,7 @@ int Board::move(int arr[4], int who) {
     return 1;
 }
 
-Board::~Board() = default;
-// End of Board obj
-
-// Functions
-int check_move(int who, int type, Field& move, Field& where, 
-                Field brd[8][8], int cords[4], int last[2], int last_moved) {
+int Board::check_move(int who, int type, Field& move, Field& where, int cords[4]) {
     Field where2;
     if (type == 1 && who == 0 && cords[2] + 1 < 8) {
         where2 = brd[cords[2] - 1][cords[3]];
@@ -228,8 +231,7 @@ int check_move(int who, int type, Field& move, Field& where,
     {
         where2 = brd[cords[2] + 1][cords[3]];
     }
-    
-    
+
     switch (type) {
         case 1:
             if (who == 1) {
@@ -257,7 +259,6 @@ int check_move(int who, int type, Field& move, Field& where,
                 return 1;
                 }
             else {
-                std::cout << "elow" << std::endl;
                 return 0;
             }
             } else {
@@ -285,23 +286,31 @@ int check_move(int who, int type, Field& move, Field& where,
                 return 1;
                 }
             else {
-                std::cout << "elob" << std::endl;
                 return 0;
             }
             }
 
             break;
-        /**case 2:
+        case 2:
+            if ((abs(cords[0] - cords[2]) == 1 && abs(cords[1] - cords[3]) == 2)
+                || (abs(cords[0] - cords[2]) == 2 && abs(cords[1] - cords[3]) == 1)) {
+                if (!(where.occupied == 1)) { return 1; }
+                else if (where.piece.color != move.piece.color) { return 1; }
+                else { return 0; }
+            } else { return 0; }
             break;
-        case 3:
+        /*case 3:
             break;
         case 4:
             break;
         case 5:
-            break;**/
+            break;*/
         default:
             return 0;
             break;
         }
     return 0;
 }
+
+Board::~Board() = default;
+// End of Board obj
