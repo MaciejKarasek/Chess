@@ -100,7 +100,7 @@ int handle_move(std::string move, std::string where, Board *board, int who) {
                 return 1;
                 break;
         }
-        //std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
+        // std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
         return board->move(move_arr, who);
     }
     return 1;
