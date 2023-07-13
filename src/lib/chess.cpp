@@ -228,7 +228,17 @@ int Board::move(int arr[4], int who) {
                     return 0;
                 }
                 break;
-            /*case 5:
+            case 5:
+                if (check_move(who, move.piece.type, move, where, arr)) {
+                    where.setvalues(move);
+                    move.setvalues(0, -1);
+                    last[0] = arr[2];
+                    last[1] = arr[3];
+                    last_moved = where.piece.num_moves;
+                    return 0;
+                }
+                break;
+            /*case 6:
                 break;*/
             default:
                 return 0;
@@ -356,8 +366,45 @@ int Board::check_move(int who, int type, Field& move, Field& where, int cords[4]
                 } else { return 0; }
             } else { return 0; }
             break;
-        /*case 5:
-            break;*/
+        case 5:
+            if (abs(cords[0] - cords[2]) == abs(cords[1] - cords[3])) {
+            x = (cords[3] > cords[1]) ? 1 : -1;
+            y = (cords[2] > cords[0]) ? 1 : -1;
+            target_x = cords[1] + x;
+            target_y = cords[0] + y;
+            while (abs(target_x - cords[3]) >= 1) {
+                if (brd[target_y][target_x].occupied == 1) { return 0; }
+                target_x += x;
+                target_y += y;
+            }
+            if ((where.occupied == 1 && where.piece.color != who)
+                || (where.occupied == 0)) {
+                    return 1;
+                } else { return 0; }
+            } else if (cords[0] == cords[2] || cords[1] == cords[3]) {
+            x = (cords[3] > cords[1]) ? 1 : -1;
+            y = (cords[2] > cords[0]) ? 1 : -1;
+            if (cords[1] != cords[3]) {
+                target_x = cords[1] + x;
+                while (abs(target_x - cords[3]) >= 1) {
+                    if (brd[cords[2]][target_x].occupied == 1) { return 0; }
+                    target_x += x;
+                }
+            } else {
+                target_y = cords[0] + y;
+                while (abs(target_y - cords[2]) >= 1) {
+                    if (brd[target_y][cords[3]].occupied == 1) { return 0; }
+                    target_y += y;
+                }
+            }
+            if ((where.occupied == 1 && where.piece.color != who)
+                || (where.occupied == 0)) {
+                    return 1;
+                } else { return 0; }
+            } else { return 0; }
+            break;
+        /*case 6:
+                break;*/
         default:
             return 0;
             break;
