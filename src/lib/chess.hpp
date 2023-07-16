@@ -30,14 +30,21 @@ class Field {
 
 class Board {
     public:
-        Board();
+        bool white_attack; // Attack on White king
+        bool black_attack; // Attack on Black king
+        Board(); // Default constructor
         void print();
-        Field brd[8][8]; // Chessboard
+        void print_attack(); //debuging
         int move(int arr[4], int who);
-        int last[2]; // Coordinates of last moved piece
-        int last_moved; 
         int check_move(int who, int type, Field& move, Field& where, int cords[4]);
+        void attack();
+        void check();
         ~Board();
+    private:
+        Field brd[8][8]; // Chessboard
+        int last[2]; // Coordinates of last moved piece
+        int last_moved;
+        bool attacked[8][8]; // Fields under attack
 };
 
 #endif

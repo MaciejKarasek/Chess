@@ -16,6 +16,10 @@ void game() {
     while (checkmate == 0) {
         std::cout << who_moves[who] << "move!" << std::endl;
         board->print();
+        std::cout << std::endl;
+        board->attack();
+        // board->print_attack();
+        // board->check();
         std::string move, where;
         std::cout << "Type your move: ";
         std::cin >> move >> where;
@@ -100,7 +104,7 @@ int handle_move(std::string move, std::string where, Board *board, int who) {
                 return 1;
                 break;
         }
-        std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
+        // std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
         return board->move(move_arr, who);
     }
     return 1;
