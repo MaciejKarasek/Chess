@@ -72,7 +72,7 @@ void Piece::setvalues(const Piece& other) {
     uni = other.uni;
     type = other.type;
     color = other.color;
-    num_moves = other.num_moves + 1;
+    num_moves = other.num_moves;
 }
 
 Piece::~Piece() = default;
@@ -106,6 +106,16 @@ Field::~Field() = default;
 
 // Board obj
 Board::Board() {
+    setvalues(brd);
+    setvalues(brd_cpy);
+    last[0] = -1;
+    last[1] = -1;
+    last_moved = 0;     
+    white_attack = 0;
+    black_attack = 0;
+}
+
+void Board::setvalues(Field brd[8][8]) {
     for (int i = 0; i < 4; i++) {
         switch(i) {
         case 0:
@@ -154,11 +164,6 @@ Board::Board() {
             break;
         }
     }
-    last[0] = -1;
-    last[1] = -1;
-    last_moved = 0;     
-    white_attack = 0;
-    black_attack = 0;
 }
 
 void Board::print() {
@@ -200,34 +205,66 @@ int Board::move(int arr[4], int who) {
     // Aliases
     Field& move = brd[arr[0]][arr[1]];
     Field& where = brd[arr[2]][arr[3]];
-    int check;
+    int check, king_attack;
     if (move.occupied == 1 && move.piece.color == who) {
         check = check_move(who, move.piece.type, move, where, arr);
         if (move.piece.type == 1) {
             if (check) {
-                where.setvalues(move);
-                move.setvalues(0, -1);
+                brd_cpy[arr[0]][arr[1]].setvalues(0, -1);
+                brd_cpy[arr[2]][arr[3]].setvalues(move);
                 if (check == 2) {
-                if (who == 1) { brd[arr[2] + 1][arr[3]].setvalues(0, -1); }
-                else { brd[arr[2] - 1][arr[3]].setvalues(0, -1); }
+                if (who == 1) { 
+                    save[0].setvalues(brd_cpy[arr[2] + 1][arr[3]]);
+                    brd_cpy[arr[2] + 1][arr[3]].setvalues(0, -1); 
+                    }
+                else {
+                    save[0].setvalues(brd_cpy[arr[2] - 1][arr[3]]);
+                    brd_cpy[arr[2] - 1][arr[3]].setvalues(0, -1); 
+                    }
                 }
-                last[0] = arr[2];
-                last[1] = arr[3];
-                last_moved = where.piece.num_moves;
-                return 0;
-            }
-        } else {
-            if (check) {
+                king_attack = attack(brd_cpy, who);
+                if (king_attack == 0) {
                     where.setvalues(move);
                     move.setvalues(0, -1);
+                    where.piece.num_moves++;
+                    if (check == 2) {
+                    if (who == 1) { brd[arr[2] + 1][arr[3]].setvalues(0, -1); } 
+                    else { brd[arr[2] - 1][arr[3]].setvalues(0, -1); }
+                    }
                     last[0] = arr[2];
                     last[1] = arr[3];
                     last_moved = where.piece.num_moves;
                     return 0;
+                } else {
+                    brd_cpy[arr[0]][arr[1]].setvalues(move);
+                    brd_cpy[arr[2]][arr[3]].setvalues(0, -1);
+                    if (check == 2) {
+                    if (who == 1) { brd_cpy[arr[2] + 1][arr[3]].setvalues(save[0]); }
+                    else { brd_cpy[arr[2] - 1][arr[3]].setvalues(save[0]); }
+                    }
                 }
+            }
+        } else {
+            if (check) {
+                brd_cpy[arr[0]][arr[1]].setvalues(0, -1);
+                brd_cpy[arr[2]][arr[3]].setvalues(move);
+                king_attack = attack(brd_cpy, who);
+                if (king_attack == 0) {
+                    where.setvalues(move);
+                    move.setvalues(0, -1);
+                    where.piece.num_moves++;
+                    last[0] = arr[2];
+                    last[1] = arr[3];
+                    last_moved = where.piece.num_moves;
+                    return 0;
+                } else {
+
+                }
+            }
+                
         }
-        }
-    return 1;
+    }
+return 1;
 }
 
 int Board::check_move(int who, int type, Field& move, Field& where, int cords[4]) {
@@ -404,7 +441,7 @@ int Board::check_move(int who, int type, Field& move, Field& where, int cords[4]
     return 0;
 }
 
-void Board::attack() {
+int Board::attack(Field brd[8][8], int who) {
     int ii, jj, index, knight[4] = {1, -1, 2, -2};
     bool branch[8] = {1, 1, 1, 1, 1, 1, 1, 1};
     for (int i = 0; i < 8; i++) {
@@ -414,10 +451,10 @@ void Board::attack() {
     }
     for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-    if (brd[i][j].occupied == 1) {
+    if (brd[i][j].occupied == 1 && brd[i][j].piece.color == who) {
         switch(brd[i][j].piece.type) { // Switch
             case 1:
-            if (brd[i][j].piece.color == 1) {
+            if (who == 1) {
                 jj = j;
                 ii = i - 1;
                 for (int k = 1; k < 3; k++) {
@@ -425,15 +462,9 @@ void Board::attack() {
                 index = (7 * ii) + (ii + jj);
                 if (ii >= 0 && jj < 8 && jj >=0
                     && brd[ii][jj].occupied == 1 && brd[ii][jj].piece.type == 6
-                    && brd[ii][jj].piece.color == 0) {
-                        black_attack = 1;
+                    && brd[ii][jj].piece.color != who) {
+                        return 1;
                     }
-                if ((ii >= 0 && jj < 8 && jj >=0 && attacked[ii][jj] == 0)
-                    && ((brd[ii][jj].occupied == 1 
-                    && brd[ii][jj].piece.color != brd[i][j].piece.color)
-                    || brd[ii][jj].occupied == 0)) {
-                    attacked[ii][jj] = 1;
-                }
                 }
             } else {
                 jj = j;
@@ -443,14 +474,8 @@ void Board::attack() {
                 index = (7 * ii) + (ii + jj);
                 if (ii < 8 && jj < 8 && jj >=0
                     && brd[ii][jj].occupied == 1 && brd[ii][jj].piece.type == 6
-                    && brd[ii][jj].piece.color == 0) {
-                        black_attack = 1;
-                }
-                if ((ii < 8 && jj < 8 && jj >=0 && attacked[ii][jj] == 0)
-                    && ((brd[ii][jj].occupied == 1 
-                    && brd[ii][jj].piece.color != brd[i][j].piece.color)
-                    || brd[ii][jj].occupied == 0)) {
-                    attacked[ii][jj] = 1;
+                    && brd[ii][jj].piece.color != who) {
+                        return 1;
                 }
                 }
             }
@@ -465,26 +490,14 @@ void Board::attack() {
                             && ii >= 0 && (jj + j) >= 0
                             && brd[ii][jj + j].occupied == 1 
                             && brd[ii][jj + j].piece.type == 6) {
-                            if (brd[ii][jj + j].piece.color == 0 
-                                && brd[i][j].piece.color == 1) {
-                                black_attack = true;
-                            } else if (brd[ii][jj + j].piece.color == 1 
-                                        && brd[i][j].piece.color == 0) {
-                                white_attack = true;
+                            if (brd[ii][jj + j].piece.color != who) {
+                                return 1;
                             }
-                            }
-                        if ((ii < 8 && (jj + j) < 8
-                            && ii >= 0 && (jj + j) >= 0 && attacked[ii][jj + j] == 0)
-                            && ((brd[ii][jj + j].occupied == 1 
-                            && brd[ii][jj + j].piece.color != brd[i][j].piece.color)
-                            || brd[ii][jj + j].occupied == 0)) {
-                            attacked[ii][jj + j] = 1;
-                        }
                         jj = jj * -1;
                     }
                 }
                 break;
-            case 3: // Bishop
+            case 3: // Bishop TODO =================================================
                 for (int i = 0; i < 4; i++) {
                     branch[i] = 1;
                 }

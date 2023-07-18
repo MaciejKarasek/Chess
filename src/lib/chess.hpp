@@ -37,14 +37,17 @@ class Board {
         void print_attack(); //debuging
         int move(int arr[4], int who);
         int check_move(int who, int type, Field& move, Field& where, int cords[4]);
-        void attack();
+        int attack(Field brd[8][8], int who);
         void check();
+        void setvalues(Field brd[8][8]);
         ~Board();
     private:
         Field brd[8][8]; // Chessboard
+        Field brd_cpy[8][8]; // Chessboard copy
         int last[2]; // Coordinates of last moved piece
         int last_moved;
         bool attacked[8][8]; // Fields under attack
+        Field save[3];
 };
 
 #endif
