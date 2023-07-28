@@ -74,6 +74,17 @@ void Piece::setvalues(const Piece& other) {
     num_moves = other.num_moves;
 }
 
+void Piece::changetype(int tp) {
+    std::string uni_white[4] = {"♘", "♗", "♖", "♕"};
+    std::string uni_black[4] = {"♞", "♝", "♜", "♛"};
+    type = tp;
+    if (color == 1) {
+        uni = uni_white[tp - 2];
+    } else {
+        uni = uni_black[tp - 2];
+    }
+}
+
 Piece::~Piece() = default;
 // End of Piece obj
 
@@ -186,7 +197,8 @@ int Board::move(int arr[4], int who) {
     // Aliases
     Field& move = brd[arr[0]][arr[1]];
     Field& where = brd[arr[2]][arr[3]];
-    int check, king_attack, x, target_x;
+    int check, king_attack, x, target_x, typeint;
+    char newtype;
     if (move.occupied == 1 && move.piece.color == who) {
         check = check_move(who, move.piece.type, move, where, arr);
         if (move.piece.type == 1) {
@@ -205,6 +217,31 @@ int Board::move(int arr[4], int who) {
                 }
                 king_attack = attack(brd_cpy, who);
                 if (king_attack == 0) {
+                    if ((arr[2] == 0 && who == 1) || (arr[2] == 7 && who == 0)) {
+                        while (true) {
+                            std::cout << "Change your pawn to: " << std::endl;
+                            std::cout << "1 - Knight ♞" << std::endl;
+                            std::cout << "2 - Bishop ♝" << std::endl;
+                            std::cout << "3 - Rook ♜" << std::endl;
+                            std::cout << "4 - Queen ♛" << std::endl;
+                            std::cout << "Type a number to pick new piece: ";
+                            std::cin >> newtype;
+                            std::cout << std::endl;
+                            if (isdigit(newtype)) {
+                                typeint = newtype - '0';
+                                if (typeint > 0 && typeint < 5) {
+                                    move.piece.changetype(typeint + 1);
+                                    break;
+                                } else {
+                                std::cout << "Wrong input" << std::endl;
+                                continue;
+                            }
+                            } else {
+                                std::cout << "Wrong input" << std::endl;
+                                continue;
+                            }
+                        }
+                    }
                     where.setvalues(move);
                     move.setvalues(0, -1);
                     where.piece.num_moves++;

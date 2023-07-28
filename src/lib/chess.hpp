@@ -14,6 +14,7 @@ class Piece {
         int num_moves; // number of moves
         void setvalues(int tp, int cr);
         void setvalues(const Piece& other);
+        void changetype(int type);
         ~Piece();
 
 };

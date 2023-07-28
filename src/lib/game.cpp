@@ -54,7 +54,7 @@ int handle_move(std::string move, std::string where, Board *board, int who) {
     int move_arr[4] = {0, 0, 0, 0};
     if (isalpha(move[0]) && isalpha(where[0]) && isdigit(move[1]) && isdigit(where[1]))
     {
-        move_arr[0] = 8 - ((move[1] - '0')); // Converting to 
+        move_arr[0] = 8 - ((move[1] - '0')); // Converting to integer
         move_arr[2] = 8 - ((where[1] - '0'));
         if (!(move_arr[1] == std::clamp(move_arr[1], 0, 7)) 
             || !(move_arr[3] == std::clamp(move_arr[3], 0, 7)))
