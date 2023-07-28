@@ -4,22 +4,29 @@
 void game() {
     Board *board;
     board = new Board;
+    int error, possible, who = 1;
     std::cout << "Welcome, to play, type moves by typing ";
     std::cout << "coordinates of piece that you want to ";
     std::cout << "move and coordinates of field where do ";
     std::cout << "you want to place your piece\n";
     std::cout << "Example: \"Type your move: e2 e4\" \n";
-    bool checkmate = 0;
     std::string who_moves[2] = {"Black ", "White "};
-    int error, who = 1;
     //board->brd[6][4].piece.uni = "E";
-    while (checkmate == 0) {
+    while (true) {
         std::cout << who_moves[who] << "move!" << std::endl;
         board->print();
+        possible = board->possible(who);
         std::cout << std::endl;
-        board->attack();
-        // board->print_attack();
-        // board->check();
+        if (possible == 0) {
+            std::cout << "Game ended!" << std::endl;
+            if (board->attack(board->brd, who)) {
+                who = (who == 1) ? 0 : 1;
+                std::cout << who_moves[who] << "won!" << std::endl;
+            } else {
+                std::cout << "Draw!";
+            }
+            break;
+        }
         std::string move, where;
         std::cout << "Type your move: ";
         std::cin >> move >> where;
