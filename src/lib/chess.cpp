@@ -1317,5 +1317,17 @@ int Board::possible(int who) {
     return count;
 }
 
+int Board::material() {
+    int num = 0;
+    for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j ++) {
+        if (brd[i][j].occupied) {
+            num++;
+        }
+    }
+    }
+    return num;
+}
+
 Board::~Board() = default;
 // End of Board obj

@@ -4,7 +4,7 @@
 void game() {
     Board *board;
     board = new Board;
-    int error, possible, who = 1;
+    int error, possible, material, who = 1;
     std::cout << "Welcome, to play, type moves by typing ";
     std::cout << "coordinates of piece that you want to ";
     std::cout << "move and coordinates of field where do ";
@@ -16,6 +16,12 @@ void game() {
         std::cout << who_moves[who] << "move!" << std::endl;
         board->print();
         possible = board->possible(who);
+        material = board->material();
+        if (material == 2) {
+            std::cout << "Game ended!" << std::endl;
+            std::cout << "Not enought material, Draw!" << std::endl;
+            break;
+        }
         std::cout << std::endl;
         if (possible == 0) {
             std::cout << "Game ended!" << std::endl;
@@ -23,7 +29,7 @@ void game() {
                 who = (who == 1) ? 0 : 1;
                 std::cout << who_moves[who] << "won!" << std::endl;
             } else {
-                std::cout << "Draw!";
+                std::cout << "Draw!" << std::endl;
             }
             break;
         }

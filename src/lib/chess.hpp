@@ -40,6 +40,7 @@ class Board {
         void check();
         int possible(int who);
         void setvalues(Field brd[8][8]);
+        int material();
         Field brd[8][8]; // Chessboard
         ~Board();
     private:
