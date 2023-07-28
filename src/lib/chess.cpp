@@ -74,6 +74,17 @@ void Piece::setvalues(const Piece& other) {
     num_moves = other.num_moves;
 }
 
+void Piece::changetype(int tp) {
+    std::string uni_white[4] = {"♘", "♗", "♖", "♕"};
+    std::string uni_black[4] = {"♞", "♝", "♜", "♛"};
+    type = tp;
+    if (color == 1) {
+        uni = uni_white[tp - 2];
+    } else {
+        uni = uni_black[tp - 2];
+    }
+}
+
 Piece::~Piece() = default;
 // End of Piece obj
 
@@ -175,7 +186,7 @@ void Board::print() {
         else {
             printf(" %i |", 9 - i);
             for (int j = 0; j < 8; j++){
-                std::cout << " " << brd_cpy[i - 1][j].piece.uni << " |";
+                std::cout << " " << brd[i - 1][j].piece.uni << " |";
             }
             std::cout << std::endl << separator << std::endl;
         }   
@@ -186,7 +197,8 @@ int Board::move(int arr[4], int who) {
     // Aliases
     Field& move = brd[arr[0]][arr[1]];
     Field& where = brd[arr[2]][arr[3]];
-    int check, king_attack;
+    int check, king_attack, x, target_x, typeint;
+    char newtype;
     if (move.occupied == 1 && move.piece.color == who) {
         check = check_move(who, move.piece.type, move, where, arr);
         if (move.piece.type == 1) {
@@ -205,6 +217,31 @@ int Board::move(int arr[4], int who) {
                 }
                 king_attack = attack(brd_cpy, who);
                 if (king_attack == 0) {
+                    if ((arr[2] == 0 && who == 1) || (arr[2] == 7 && who == 0)) {
+                        while (true) {
+                            std::cout << "Change your pawn to: " << std::endl;
+                            std::cout << "1 - Knight ♞" << std::endl;
+                            std::cout << "2 - Bishop ♝" << std::endl;
+                            std::cout << "3 - Rook ♜" << std::endl;
+                            std::cout << "4 - Queen ♛" << std::endl;
+                            std::cout << "Type a number to pick new piece: ";
+                            std::cin >> newtype;
+                            std::cout << std::endl;
+                            if (isdigit(newtype)) {
+                                typeint = newtype - '0';
+                                if (typeint > 0 && typeint < 5) {
+                                    move.piece.changetype(typeint + 1);
+                                    break;
+                                } else {
+                                std::cout << "Wrong input" << std::endl;
+                                continue;
+                            }
+                            } else {
+                                std::cout << "Wrong input" << std::endl;
+                                continue;
+                            }
+                        }
+                    }
                     where.setvalues(move);
                     move.setvalues(0, -1);
                     where.piece.num_moves++;
@@ -225,6 +262,39 @@ int Board::move(int arr[4], int who) {
                     }
                 }
             }
+        } else if (move.piece.type == 6 && check == 2){ // Castling
+            if (attack(brd, who)) {
+                return 1;
+            }
+            x = (arr[3] == 7) ? 1 : -1; 
+            target_x = arr[1] + x;
+           for (int k = 0; k < 2; k ++) {
+                brd_cpy[arr[0]][target_x].setvalues(move);
+                brd_cpy[arr[0]][arr[1]].setvalues(0, -1);
+                if(attack(brd_cpy, who)) {
+                    brd_cpy[arr[0]][target_x].setvalues(brd[arr[0]][target_x]);
+                    brd_cpy[arr[0]][arr[1]].setvalues(move);
+                    return 1;
+                }
+                brd_cpy[arr[0]][target_x].setvalues(brd[arr[0]][target_x]);
+                brd_cpy[arr[0]][arr[1]].setvalues(move);
+                target_x += x;
+            }
+            target_x -= x;
+            move.piece.num_moves++;
+            where.piece.num_moves++;
+            brd[arr[0]][target_x].setvalues(move);
+            brd[arr[0]][target_x - x].setvalues(where);
+            brd_cpy[arr[0]][target_x].setvalues(move);
+            brd_cpy[arr[0]][target_x - x].setvalues(where);
+            move.setvalues(0, -1);
+            where.setvalues(0, -1);
+            brd_cpy[arr[0]][arr[1]].setvalues(0, -1);
+            brd_cpy[arr[2]][arr[3]].setvalues(0, -1);
+            last[0] = arr[0];
+            last[1] = target_x;
+            last_moved = brd[arr[0]][target_x].piece.num_moves;
+            return 0;
         } else {
             if (check) {
                 brd_cpy[arr[0]][arr[1]].setvalues(0, -1);
@@ -243,8 +313,7 @@ int Board::move(int arr[4], int who) {
                     brd_cpy[arr[2]][arr[3]].setvalues(brd[arr[2]][arr[3]]);
                     return 1;
                 }
-            }
-                
+            }     
         }
     }
 return 1;
@@ -412,7 +481,20 @@ int Board::check_move(int who, int type, Field& move, Field& where, int cords[4]
                         || (where.occupied == 1 && where.piece.color != who)) {
                         return 1;
                     }
+            } else if (cords[0] == cords[2] && (cords[3] == 0 || cords[3] == 7)  // Castling
+                    && cords[1] == 4
+                    && where.occupied && where.piece.type == 4
+                    && move.piece.num_moves == 0 && where.piece.num_moves == 0) {
+                x = (cords[3] > cords[1]) ? 1 : -1;
+                target_x = cords[1] + x;
+                while (abs(target_x - cords[3]) >= 1) {
+                    if (brd[cords[0]][target_x].occupied == 1) {
+                        return 0; 
+                        }
+                    target_x += x;
                 }
+                return 2;
+            }
             return 0;
             break;
         default:
@@ -1270,6 +1352,18 @@ int Board::possible(int who) {
     } // j loop
     } // i loop
     return count;
+}
+
+int Board::material() {
+    int num = 0;
+    for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j ++) {
+        if (brd[i][j].occupied) {
+            num++;
+        }
+    }
+    }
+    return num;
 }
 
 Board::~Board() = default;

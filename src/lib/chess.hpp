@@ -14,6 +14,7 @@ class Piece {
         int num_moves; // number of moves
         void setvalues(int tp, int cr);
         void setvalues(const Piece& other);
+        void changetype(int type);
         ~Piece();
 
 };
@@ -40,6 +41,7 @@ class Board {
         void check();
         int possible(int who);
         void setvalues(Field brd[8][8]);
+        int material();
         Field brd[8][8]; // Chessboard
         ~Board();
     private:
