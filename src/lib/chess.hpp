@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 class Piece {
     public:
@@ -10,7 +11,6 @@ class Piece {
         std::string uni; // Char that represent piece at chessboard
         int type; // Type of piece
         int color; // Color of piece 0 - Black, 1 - White
-        bool attack_king; // If attacking king -> 1, of not -> 0
         int num_moves; // number of moves
         void setvalues(int tp, int cr);
         void setvalues(const Piece& other);
@@ -34,17 +34,19 @@ class Board {
         bool black_attack; // Attack on Black king
         Board(); // Default constructor
         void print();
-        void print_attack(); //debuging
         int move(int arr[4], int who);
         int check_move(int who, int type, Field& move, Field& where, int cords[4]);
-        void attack();
+        bool attack(Field bord[8][8], int who);
         void check();
+        int possible(int who);
+        void setvalues(Field brd[8][8]);
+        Field brd[8][8]; // Chessboard
         ~Board();
     private:
-        Field brd[8][8]; // Chessboard
+        Field brd_cpy[8][8]; // Chessboard copy
         int last[2]; // Coordinates of last moved piece
         int last_moved;
-        bool attacked[8][8]; // Fields under attack
+        Field save[3]; // 0 en passant
 };
 
 #endif
