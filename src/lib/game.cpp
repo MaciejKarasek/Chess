@@ -48,77 +48,29 @@ void game() {
         }
         who = (who == 0) ? 1 : 0;
     }
+    delete board;
 }
 
 int handle_move(std::string move, std::string where, Board *board, int who) {
-    int move_arr[4] = {0, 0, 0, 0};
-    if (isalpha(move[0]) && isalpha(where[0]) && isdigit(move[1]) && isdigit(where[1]))
-    {
-        move_arr[0] = 8 - ((move[1] - '0')); // Converting to integer
-        move_arr[2] = 8 - ((where[1] - '0'));
-        if (!(move_arr[1] == std::clamp(move_arr[1], 0, 7)) 
-            || !(move_arr[3] == std::clamp(move_arr[3], 0, 7)))
-            { return 1; }
-        switch (tolower(move[0])) {
-            case 'a':
-                move_arr[1] = 0;
-                break;
-            case 'b':
-                move_arr[1] = 1;
-                break;
-            case 'c':
-                move_arr[1] = 2;
-                break;
-            case 'd':
-                move_arr[1] = 3;
-                break;
-            case 'e':
-                move_arr[1] = 4;
-                break;
-            case 'f':
-                move_arr[1] = 5;
-                break;
-            case 'g':
-                move_arr[1] = 6;
-                break;
-            case 'h':
-                move_arr[1] = 7;
-                break;
-            default:
-                return 1;
-                break;
-        }
-        switch (tolower(where[0])) {
-            case 'a':
-                move_arr[3] = 0;
-                break;
-            case 'b':
-                move_arr[3] = 1;
-                break;
-            case 'c':
-                move_arr[3] = 2;
-                break;
-            case 'd':
-                move_arr[3] = 3;
-                break;
-            case 'e':
-                move_arr[3] = 4;
-                break;
-            case 'f':
-                move_arr[3] = 5;
-                break;
-            case 'g':
-                move_arr[3] = 6;
-                break;
-            case 'h':
-                move_arr[3] = 7;
-                break;
-            default:
-                return 1;
-                break;
-        }
-        // std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
-        return board->move(move_arr, who);
+    std::vector<int> move_arr{0, 0, 0, 0};
+    std::map<char, int> char_to_int{{'a', 0}, {'b', 1}, {'c', 2}, {'d', 3}, 
+                                    {'e', 4}, {'f', 5}, {'g', 6}, {'h', 7}};
+    std::map<char, int>::iterator mp_iter;
+    if (!isalpha(move[0]) || !isalpha(where[0]) || !isdigit(move[1]) || !isdigit(where[1])) return 1;
+
+    move_arr[0] = 8 - ((move[1] - '0')); // Converting to integer
+    move_arr[2] = 8 - ((where[1] - '0'));
+
+    if (move_arr[0] < 0 || move_arr[0] > 7 ||
+        move_arr[2] < 0 || move_arr[2] > 7) return 1; // If out of range <0, 7> return 1 -> wrong move
+    
+    mp_iter = char_to_int.find(tolower(move[0])); // If out of range <a, h> return 1
+    if (mp_iter == char_to_int.end()) return 1;
+    move_arr[1] = mp_iter->second;
+
+    mp_iter = char_to_int.find(tolower(where[0])); // If out of range <a, h> return 1
+    if (mp_iter == char_to_int.end()) return 1;
+    move_arr[3] = mp_iter->second;
+    // std::cout << move_arr[0] <<move_arr[1] << move_arr[2] << move_arr[3] << std::endl;
+    return board->move(move_arr, who);
     }
-    return 1;
-}
