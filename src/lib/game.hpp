@@ -1,10 +1,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#ifndef LIBARIES
+#define LIBARIES
 #include <string>
 #include <iostream>
-#include <algorithm>
-#include "chess.hpp"
+#include <vector>
+#include <map>
+#endif // LIBARIES
+#include "Board.hpp"
 
 // Main game function
 void game();
