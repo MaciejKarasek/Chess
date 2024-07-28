@@ -9,15 +9,14 @@ on:
 jobs:
   build:
 
-    runs-on: ${{ matrix.os }}
+    uns-on: ${{ matrix.os }}
+    env:
+      BUILD_TYPE: Debug
     strategy:
+      fail-fast: true
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            install: choco install ninja
-          - os: ubuntu-latest
-            install: sudo apt install -yqq ninja-build
+        os: ubuntu-20.04
+        cxx: clang++
     steps:
     - uses: actions/checkout@v3
     - name: make
