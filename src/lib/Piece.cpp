@@ -28,13 +28,13 @@ void Piece::setvalues(const Piece& other) {
 }
 
 void Piece::changetype(int tp) {
-    std::vector<std::wstring> uni_white{ L"♙", L"♘", L"♗", L"♖", L"♕" };
-    std::vector<std::wstring> uni_black{ L"♟", L"♞", L"♝", L"♜", L"♛" };
+    std::vector<std::wstring> uni_white{ L"♘", L"♗", L"♖", L"♕" };
+    std::vector<std::wstring> uni_black{ L"♞", L"♝", L"♜", L"♛" };
     type = tp;
     if (color == 1) {
-        uni = uni_white[tp - 1];
+        uni = uni_white[tp - 2];
     } else {
-        uni = uni_black[tp - 1];
+        uni = uni_black[tp - 2];
     }
 }
 
