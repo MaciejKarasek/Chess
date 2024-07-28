@@ -17,6 +17,9 @@ jobs:
       matrix:
         os: ubuntu-20.04
         cxx: clang++
+      include:
+          - os: windows-2019
+            cxx: msvc
     steps:
     - uses: actions/checkout@v3
     - name: make
