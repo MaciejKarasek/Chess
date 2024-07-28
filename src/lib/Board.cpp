@@ -1,4 +1,5 @@
 #include "Board.hpp"
+#include <format>
 
 Board::Board() {
     setvalues(brd);
@@ -62,18 +63,18 @@ void Board::setvalues(std::vector <std::vector<Field>> &bord) {
 }
 
 void Board::print() {
-    std::string separator = "---+---+---+---+---+---+---+---+---+";
+    std::wstring separator = L"---+---+---+---+---+---+---+---+---+";
     for (int i = 0; i < 9; i++) {
         if (i == 0) {
-            std::cout << "   | A | B | C | D | E | F | G | H |" << std::endl;
-            std::cout<< separator << std::endl;
+            std::wcout << L"   | A | B | C | D | E | F | G | H |" << std::endl;
+            std::wcout<< separator << std::endl;
         }
         else {
-            printf(" %i |", 9 - i);
+            std::wcout << std::format(L" {} |", 9 - i);
             for (int j = 0; j < 8; j++){
-                std::cout << " " << brd[i - 1][j].piece.uni << " |";
+                std::wcout << std::format(L" {} |", brd[i - 1][j].piece.uni);
             }
-            std::cout << std::endl << separator << std::endl;
+            std::wcout << std::endl << separator << std::endl;
         }   
     }
 }
@@ -104,25 +105,25 @@ int Board::move(std::vector<int> &arr, int who) {
                 if (king_attack == 0) {
                     if ((arr[2] == 0 && who == 1) || (arr[2] == 7 && who == 0)) {
                         while (true) {
-                            std::cout << "Change your pawn to: " << std::endl;
-                            std::cout << "1 - Knight ♞" << std::endl;
-                            std::cout << "2 - Bishop ♝" << std::endl;
-                            std::cout << "3 - Rook ♜" << std::endl;
-                            std::cout << "4 - Queen ♛" << std::endl;
-                            std::cout << "Type a number to pick new piece: ";
+                            std::wcout << L"Change your pawn to: " << std::endl;
+                            std::wcout << L"1 - Knight ♞" << std::endl;
+                            std::wcout << L"2 - Bishop ♝" << std::endl;
+                            std::wcout << L"3 - Rook ♜" << std::endl;
+                            std::wcout << L"4 - Queen ♛" << std::endl;
+                            std::wcout << L"Type a number to pick new piece: ";
                             std::cin >> newtype;
-                            std::cout << std::endl;
+                            std::wcout << std::endl;
                             if (isdigit(newtype)) {
                                 typeint = newtype - '0';
                                 if (typeint > 0 && typeint < 5) {
                                     move.piece.changetype(typeint + 1);
                                     break;
                                 } else {
-                                std::cout << "Wrong input" << std::endl;
+                                std::wcout << L"Wrong input" << std::endl;
                                 continue;
                             }
                             } else {
-                                std::cout << "Wrong input" << std::endl;
+                                std::wcout << L"Wrong input" << std::endl;
                                 continue;
                             }
                         }
@@ -394,7 +395,7 @@ int Board::check_move(int who,
 }
 
 bool Board::attack(std::vector <std::vector<Field>> &bord, int who) {
-    int ii, jj, index, knight[4] = {1, -1, 2, -2};
+    int ii, jj, knight[4] = {1, -1, 2, -2};
     int x, y;
     std::vector <bool> branch;
     branch = {true, true, true, true, true, true, true, true};
@@ -713,13 +714,8 @@ bool Board::attack(std::vector <std::vector<Field>> &bord, int who) {
     return 0;
 }
 
-void Board::check() { // Checks which king is under attack
-    std::cout << "White: " << white_attack << std::endl;
-    std::cout << "Black: " << black_attack << std::endl;
-}
-
 int Board::possible(int who) {
-    int ii, jj, index, knight[4] = {1, -1, 2, -2}, king_attack, count = 0;
+    int ii, jj, knight[4] = {1, -1, 2, -2}, count = 0;
     int x, y;
     std::vector <bool> branch;
     branch = {true, true, true, true, true, true, true, true};

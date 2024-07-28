@@ -12,7 +12,7 @@
 class Piece {
     public:
         Piece();
-        std::string uni; // Char that represent piece at chessboard
+        std::wstring uni; // Char that represent piece at chessboard
         int type; // Type of piece
         int color; // Color of piece 0 - Black, 1 - White
         int num_moves; // number of moves

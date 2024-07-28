@@ -1,23 +1,23 @@
 #include "Piece.hpp"
 
 Piece::Piece() {
-    uni = " ";
+    uni = L' ';
     type = 0;
     num_moves = 0;
     color = 0;
 }
 void Piece::setvalues(int tp, int cr) // tp stands for type, cr for color
 {
-    std::vector <std::vector<std::string>> pieces{
-        {" ", "♟", "♞", "♝", "♜", "♛", "♚"},
-        {" ", "♙", "♘", "♗", "♖", "♕", "♔"}};
+    std::vector <std::vector<std::wstring>> pieces{
+        {L" ", L"♟", L"♞", L"♝", L"♜", L"♛", L"♚"},
+        {L" ", L"♙", L"♘", L"♗", L"♖", L"♕", L"♔"}};
 
     num_moves = 0;
     type = tp;
     color = cr;
     if (color != -1) {
         uni = pieces[color][type];
-    } else uni = " ";
+    } else uni = L' ';
 }
 
 void Piece::setvalues(const Piece& other) {
@@ -28,13 +28,13 @@ void Piece::setvalues(const Piece& other) {
 }
 
 void Piece::changetype(int tp) {
-    std::vector<std::string> uni_white{"♘", "♗", "♖", "♕"};
-    std::vector<std::string> uni_black{"♞", "♝", "♜", "♛"};
+    std::vector<std::wstring> uni_white{ L"♙", L"♘", L"♗", L"♖", L"♕" };
+    std::vector<std::wstring> uni_black{ L"♟", L"♞", L"♝", L"♜", L"♛" };
     type = tp;
     if (color == 1) {
-        uni = uni_white[tp - 2];
+        uni = uni_white[tp - 1];
     } else {
-        uni = uni_black[tp - 2];
+        uni = uni_black[tp - 1];
     }
 }
 

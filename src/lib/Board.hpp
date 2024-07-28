@@ -24,7 +24,6 @@ class Board {
                        Field& where, 
                        std::vector<int> &cords);
         bool attack(std::vector <std::vector<Field>> &bord, int who);
-        void check();
         int possible(int who);
         void setvalues(std::vector <std::vector<Field>> &brd);
         int material();
