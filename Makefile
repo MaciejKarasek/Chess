@@ -1,4 +1,4 @@
-COMPILER = g
+COMPILER = gcc
 COMPILER_FLAG = -std=c++23
 
 output: Piece.o Field.o Board.o game.o main.o
