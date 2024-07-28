@@ -1,5 +1,5 @@
 COMPILER = gcc
-COMPILER_FLAG = -std=c++20
+COMPILER_FLAG = -std=gnu++20
 
 output: Piece.o Field.o Board.o game.o main.o
 	g++-10 main.o Piece.o Field.o Board.o game.o ${COMPILER_FLAG} -o output
