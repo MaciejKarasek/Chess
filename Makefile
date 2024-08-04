@@ -1,5 +1,5 @@
-COMPILER = g++-14
-COMPILER_FLAG = -c -std=c++20
+COMPILER = g++
+COMPILER_FLAG = -c -std=c++23
 
 output: Piece.o Field.o Board.o game.o main.o
 	clang main.o Piece.o Field.o Board.o game.o ${COMPILER_FLAG} -o output
