@@ -1,4 +1,4 @@
-COMPILER = g++-14
+COMPILER = g++-13
 COMPILER_FLAG = -c -std=c++20
 
 output: Piece.o Field.o Board.o game.o main.o
