@@ -1,65 +1,27 @@
 #include "Board.hpp"
 #include <format>
+#include <iostream>
+#include <vector>
 
-Board::Board() {
-    setvalues(brd);
-    setvalues(brd_cpy);
-    last[0] = -1;
-    last[1] = -1;
-    last_moved = 0;     
-    white_attack = 0;
-    black_attack = 0;
-}
-
-void Board::setvalues(std::vector <std::vector<Field>> &bord) {
-    for (int i = 0; i < 4; i++) {
-        switch(i) {
-        case 0:
-            bord[0][i].setvalues(4, 0);
-            bord[1][i].setvalues(1, 0);
-            bord[0][7 - i].setvalues(4, 0);
-            bord[1][7 - i].setvalues(1, 0);
-
-            bord[7][i].setvalues(4, 1);
-            bord[6][i].setvalues(1, 1);
-            bord[7][7 - i].setvalues(4, 1);
-            bord[6][7 - i].setvalues(1, 1);
-            break;
-        case 1:
-            bord[0][i].setvalues(2, 0);
-            bord[1][i].setvalues(1, 0);
-            bord[0][7 - i].setvalues(2, 0);
-            bord[1][7 - i].setvalues(1, 0);
-
-            bord[7][i].setvalues(2, 1);
-            bord[6][i].setvalues(1, 1);
-            bord[7][7 - i].setvalues(2, 1);
-            bord[6][7 - i].setvalues(1, 1);
-            break;
-        case 2:
-            bord[0][i].setvalues(3, 0);
-            bord[1][i].setvalues(1, 0);
-            bord[0][7 - i].setvalues(3, 0);
-            bord[1][7 - i].setvalues(1, 0);
-
-            bord[7][i].setvalues(3, 1);
-            bord[6][i].setvalues(1, 1);
-            bord[7][7 - i].setvalues(3, 1);
-            bord[6][7 - i].setvalues(1, 1);
-            break;
-        case 3:
-            bord[0][i].setvalues(5, 0);
-            bord[1][i].setvalues(1, 0);
-            bord[0][7 - i].setvalues(6, 0);
-            bord[1][7 - i].setvalues(1, 0);
-
-            bord[7][i].setvalues(5, 1);
-            bord[6][i].setvalues(1, 1);
-            bord[7][7 - i].setvalues(6, 1);
-            bord[6][7 - i].setvalues(1, 1);
-            break;
+Board::Board()
+{
+    for (int x = 0; x <= 7; x++)
+    {
+        for (int y = 0; y <= 7; y++)
+        {
+            board[i][j] = std::make_unique<Field>(x, y);
+            boardCopy[i][j] = std::make_unique<Field>(x, y);
         }
     }
+}
+
+Field Board::at(const std::wstring_view chessCoords) const
+{
+    return brd[chessCoords.at(0) - 'a'][chessCoords.at(1) - 1];
+}
+
+void Board::SetValues() {
+    
 }
 
 void Board::print() {
@@ -222,61 +184,7 @@ int Board::check_move(int who,
 
     switch (type) {
         case 1:
-            if (who == 1) {
-            if ((cords[1] == (cords[3] - 1) || cords[1] == (cords[3] + 1)) 
-                && cords[0] == (cords[2] + 1) 
-                && where.occupied && where.piece.color == 0) {
-                return 1;
-            }
-            // En passant
-            if ((cords[1] == (cords[3] - 1) || cords[1] == (cords[3] + 1))
-                && cords[0] == (cords[2] + 1)
-                && where2.occupied == 1 && where2.piece.color == 0 
-                && last[0] == (cords[2] + 1) && last[1] == cords[3]
-                && last_moved == 1 && last[0] == 3) {
-                return 2;
-                }
-            if (cords[1] == cords[3] && cords[0] == (cords[2] + 1)
-                && !where.occupied) {
-                return 1;
-            }
-            if (cords[1] == cords[3] && cords[0] == (cords[2] + 2)
-                && !(brd[cords[2] + 1][cords[3]].occupied == 1)
-                && !(where.occupied == 1)
-                && move.piece.num_moves == 0) {
-                return 1;
-                }
-            else {
-                return 0;
-            }
-            } else {
-            if ((cords[1] == (cords[3] - 1) || cords[1] == (cords[3] + 1)) 
-                && cords[0] == (cords[2] - 1) 
-                && where.occupied == 1 && where.piece.color == 1) {
-                return 1;
-            }
-            // En passant
-            if ((cords[1] == (cords[3] - 1) || cords[1] == (cords[3] + 1))
-                && cords[0] == (cords[2] - 1)
-                && where2.occupied == 1 && where2.piece.color == 1 
-                && last[0] == (cords[2] - 1) && last[1] == cords[3]
-                && last_moved == 1 && last[0] == 4) {
-                return 2;
-                }
-            if (cords[1] == cords[3] && cords[0] == (cords[2] - 1)
-                && !(where.occupied == 1)) {
-                return 1;
-            }
-            if (cords[1] == cords[3] && cords[0] == (cords[2] - 2)
-                && !(brd[cords[2] - 1][cords[3]].occupied == 1)
-                && !(where.occupied == 1)
-                && move.piece.num_moves == 0) {
-                return 1;
-                }
-            else {
-                return 0;
-            }
-            }
+            
 
             break;
         case 2:
