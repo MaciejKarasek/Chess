@@ -1,0 +1,7 @@
+add_subdirectory(Piece)
+add_subdirectory(Pawn)
+add_subdirectory(Bishop)
+add_subdirectory(Knight)
+add_subdirectory(Rook)
+add_subdirectory(Queen)
+add_subdirectory(King)

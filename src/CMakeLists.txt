@@ -1,0 +1,6 @@
+add_subdirectory(Main)
+add_subdirectory(Helpers)
+add_subdirectory(Pieces)
+add_subdirectory(Field)
+add_subdirectory(Board)
+add_subdirectory(Game)
