@@ -9,5 +9,5 @@ class Field {
         const Coords Coords_;
         std::shared_ptr<Piece> StandingPiece;
 
-        ~Field();
+        ~Field() = default;
 };

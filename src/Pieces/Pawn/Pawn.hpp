@@ -1,4 +1,4 @@
-class Pawn : Piece 
+class Pawn : public Piece 
 {
     public:
         Pawn(Enums::Side side);

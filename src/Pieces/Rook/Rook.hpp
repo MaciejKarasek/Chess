@@ -1,4 +1,4 @@
-class Rook : Piece
+class Rook : public Piece
 {
     public:
         Rook(Enums::Side side);

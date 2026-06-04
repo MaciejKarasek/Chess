@@ -1,4 +1,4 @@
-class Bishop : Piece
+class Bishop : public Piece
 {
     public:
         Bishop(Enums::Side side);

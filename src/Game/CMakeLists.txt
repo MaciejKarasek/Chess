@@ -11,6 +11,6 @@ target_sources(Game
 )
 
 target_link_libraries(Game
-    PRIVATE
+    PUBLIC
         Board
 )

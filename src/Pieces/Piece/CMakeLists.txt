@@ -2,7 +2,7 @@ add_library(Piece)
 
 target_precompile_headers(Piece
     PUBLIC
-        ${CMAKE_SOURCE_DIR}/Helpers/Coords.hpp
+        ${CMAKE_SOURCE_DIR}/src/Helpers/Coords.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Piece.hpp
 )
 

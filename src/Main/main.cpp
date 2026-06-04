@@ -4,6 +4,8 @@
 
 int main() {
     std::locale::global(std::locale(""));
-    game();
+    
+    Game().Play();
+
     return 0;
 }

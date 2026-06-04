@@ -17,17 +17,13 @@ bool IsNthRow(const Enums::Row row, const int y)
     return y == intRow || y == 8 - intRow;
 }
 
-Enums::Side GetSide(const int y)
-{
-    return y <= 1 ? Enums::Side::White : Enums::Side::Black;
-}
 // Helper functions
 
 Field::Field(const int x, const int y)
     : Coords_(x, y)
 {
-    const auto side = GetSide(y);
-
+    const auto side = y <= 1 ? Enums::Side::White : Enums::Side::Black;
+    
     if (IsNthRow(Enums::Row::_2, y))
     {
         StandingPiece = std::make_shared<Pawn>(side);
@@ -47,11 +43,11 @@ Field::Field(const int x, const int y)
         else if (xEnum == Enums::Column::E)
             StandingPiece = std::make_shared<King>(side);
         else
-            StandingPiece = std::make_shared<Piece>(side);
+            StandingPiece = std::make_shared<Piece>();
     }
 }
         
 bool Field::IsOccupied() const
 {
-    return !(StandingPiece->Side == Enums::Side::None);
+    return !(StandingPiece->Side == Enums::Side::None); // TODO checking standing piece side is not the best way to check if field is occupied
 }

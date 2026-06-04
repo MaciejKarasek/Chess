@@ -1,5 +1,6 @@
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "Field.hpp"
 
@@ -8,7 +9,7 @@ class Board {
         bool white_attack;
         bool black_attack;
         Board();
-        void print();
+        void Print();
         Field at(const std::wstring_view chessCoords) const;
         int move(std::vector<int> &arr, int who);
         int check_move(int who, 
@@ -18,7 +19,7 @@ class Board {
                        std::vector<int> &cords);
         bool attack(std::vector <std::vector<Field>> &bord, int who);
         int possible(int who);
-        void setvalues(std::vector <std::vector<Field>> &brd);
+        void SetValues();
         int material();
         std::unique_ptr<Field> board[8][8];
         ~Board();
@@ -26,5 +27,4 @@ class Board {
         std::unique_ptr<Field> boardCopy[8][8];
         int last[2]; // Coordinates of last moved piece
         int last_moved;
-        Field save[3]; // 0 en passant
 };

@@ -1,5 +1,8 @@
 #include "Game.hpp"
+
 #include <memory>
+#include <iostream>
+#include <map>
 
 // Main game function
 void Game::Play() {
@@ -10,7 +13,7 @@ void Game::Play() {
     std::vector<std::wstring> who_moves = { L"Black ", L"White " };
     while (true) {
         std::wcout << who_moves[who] << L"move!" << std::endl;
-        board->print();
+        board->Print();
         possible = board->possible(who);
         material = board->material();
         if (material == 2) {
@@ -21,13 +24,13 @@ void Game::Play() {
         std::wcout << std::endl;
         if (possible == 0) {
             std::wcout << "Game ended!" << std::endl;
-            if (board->attack(board->brd, who)) {
-                who = (who == 1) ? 0 : 1;
-                std::wcout << who_moves[who] << "won!" << std::endl;
-            } else {
-                std::wcout << "Draw!" << std::endl;
-            }
-            break;
+            // if (board->attack(board->board, who)) {
+            //     who = (who == 1) ? 0 : 1;
+            //     std::wcout << who_moves[who] << "won!" << std::endl;
+            // } else {
+            //     std::wcout << "Draw!" << std::endl;
+            // }
+            // break;
         }
         std::string move, where;
         std::wcout << L"Type your move: ";
@@ -37,7 +40,7 @@ void Game::Play() {
             std::wcout << L"Wrong move, try again\n";
             continue;
         }
-        error = handle_move(move, where, board, who);
+        // error = handle_move(move, where, board, who);
         if (error == 1) {
             std::wcout << L"Wrong move, try again\n";
             continue;

@@ -1,4 +1,4 @@
-class King : Piece
+class King : public Piece
 {
     public:
         King(Enums::Side side);

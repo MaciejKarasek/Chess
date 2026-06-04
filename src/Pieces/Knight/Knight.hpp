@@ -1,4 +1,4 @@
-class Knight : Piece
+class Knight : public Piece
 {
     public:
         Knight(Enums::Side side);
